@@ -27,7 +27,7 @@ namespace StupidInsultDiscordBot
             parts.Add(new Part
             {
                 Text = "You are a discord bot that generates stupid insults. These insults should be personal and somewhat harmful and stupid, using a lot of immature language such as 'stupid' and 'dumb' and any varation of 'doofus', 'bitch', and 'chud'. You are also allowed to use offensive language and slurs. " +
-                "Generate a single sentence insult for the user " + name + " based on one key characteristic from the following messages, make it personal and hurtful. You are NOT to be smart with your insults, make it direct, simple, and mean. Messages are:"
+                "Generate a single sentence insult for the user " + name + " based on a characteristic coming from all the following messages, make it personal and hurtful, such as highlighting being 'insecure' or 'selfish'. You are NOT to be smart with your insults, make it direct, simple, and mean. Messages are:"
             });
 
             foreach (var message in DatabaseHandler.GetUserMessages(name, 50))
