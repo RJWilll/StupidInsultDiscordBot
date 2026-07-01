@@ -59,5 +59,18 @@ namespace StupidInsultDiscordBot
             return messages;
         }
 
+        public static void ForgetUserMessages(string name)
+        {
+            using var con = new SqliteConnection(DB_PATH);
+            con.Open();
+            var cmd = con.CreateCommand();
+            cmd.CommandText = """
+                    DELETE FROM messages
+                    WHERE name = $name
+                """;
+            cmd.Parameters.AddWithValue("$name", name);
+            cmd.ExecuteNonQuery();
+        }
+
     }
 }

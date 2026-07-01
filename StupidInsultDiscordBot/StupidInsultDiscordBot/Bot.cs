@@ -46,6 +46,10 @@ namespace StupidInsultDiscordBot
             {
                 await HandleComputahInsultCommand(message);
             }
+            else if(message.Content.StartsWith("!computahforget"))
+            {
+                await HandleComputahForgetCommand()(message);
+            }
         }
 
         private async Task HandleComputahInsultCommand(SocketMessage message)
@@ -68,6 +72,22 @@ namespace StupidInsultDiscordBot
                 .Build();
 
             await message.Channel.SendMessageAsync(embed: embed);
+        }
+
+        private async Task HandleComputahForgetCommand(SocketMessage message)
+        {
+            // Get the mentioned user, or default to the message author
+            var target = message.MentionedUsers.FirstOrDefault() as SocketUser
+                         ?? message.Author;
+            if (target.Id == message.Author.Id && message.MentionedUsers.Count == 0)
+            {
+                await message.Channel.SendMessageAsync(
+                    "Tag someone, e.g. `!computahforget @friend`");
+                return;
+            }
+            DatabaseHandler.ForgetUserMessages(target.Username);
+            await message.Channel.SendMessageAsync(
+                $"Forgot all messages for {target.Username}. I love your privacy :)");
         }
     }
 }
