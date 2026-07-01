@@ -18,6 +18,11 @@ namespace StupidInsultDiscordBot
                     name          TEXT,
                     message       TEXT
                 );
+
+                CREATE TABLE IF NOT EXISTS blockedusers (
+                    id       INTEGER PRIMARY KEY AUTOINCREMENT,
+                    name          TEXT
+                );
                 """;
             cmd.ExecuteNonQuery();
         }
@@ -72,5 +77,44 @@ namespace StupidInsultDiscordBot
             cmd.ExecuteNonQuery();
         }
 
+        public static void BlockUser(string name)
+        {
+            using var con = new SqliteConnection(DB_PATH);
+            con.Open();
+            var cmd = con.CreateCommand();
+            cmd.CommandText = """
+                    INSERT INTO blockedusers (name)
+                    VALUES ($name)
+                """;
+            cmd.Parameters.AddWithValue("$name", name);
+            cmd.ExecuteNonQuery();
+        }
+
+        public static bool IsUserBlocked(string name)
+        {
+            using var con = new SqliteConnection(DB_PATH);
+            con.Open();
+            var cmd = con.CreateCommand();
+            cmd.CommandText = """
+                    SELECT COUNT(*) FROM blockedusers
+                    WHERE name = $name
+                """;
+            cmd.Parameters.AddWithValue("$name", name);
+            var count = (long)cmd.ExecuteScalar();
+            return count > 0;
+        }
+
+        public static void unblockUser(string name)
+        {
+            using var con = new SqliteConnection(DB_PATH);
+            con.Open();
+            var cmd = con.CreateCommand();
+            cmd.CommandText = """
+                    DELETE FROM blockedusers
+                    WHERE name = $name
+                """;
+            cmd.Parameters.AddWithValue("$name", name);
+            cmd.ExecuteNonQuery();
+        }
     }
 }
